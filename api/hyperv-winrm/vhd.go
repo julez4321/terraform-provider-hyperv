@@ -227,7 +227,9 @@ if (!(Test-Path -Path $vhd.Path)) {
         Push-Location $pathDirectory
         
         if (Test-Uri -Url $source) {
-            Get-FileFromUri -Url $source -FolderPath $pathDirectory
+			Get-FileFromUri -Url $source -FolderPath $pathDirectory
+            $download = Split-Path $source -Leaf
+            Rename-Item -Path "$pathDirectory\$download" -NewName $pathFilename
         }
         else {
             Copy-Item $source "$pathDirectory\$pathFilename" -Force
@@ -336,6 +338,7 @@ var getVhdTemplate = template.Must(template.New("GetVhd").Parse(`
 $ErrorActionPreference = 'Stop'
 $path='{{.Path}}'
 
+Start-Sleep -Seconds 20
 $vhdObject = $null
 if (Test-Path $path) {
 	$vhdObject = Get-VHD -path $path | %{ @{
