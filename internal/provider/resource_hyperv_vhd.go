@@ -15,10 +15,10 @@ import (
 )
 
 const (
-	ReadVhdTimeout   = 1 * time.Minute
+	ReadVhdTimeout   = 2 * time.Minute
 	CreateVhdTimeout = 5 * time.Minute
-	UpdateVhdTimeout = 5 * time.Minute
-	DeleteVhdTimeout = 1 * time.Minute
+	UpdateVhdTimeout = 2 * time.Minute
+	DeleteVhdTimeout = 2 * time.Minute
 )
 
 func resourceHyperVVhd() *schema.Resource {

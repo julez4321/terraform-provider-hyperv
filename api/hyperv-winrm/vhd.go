@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"text/template"
+	"time"
 
 	"github.com/taliesins/terraform-provider-hyperv/api"
 )
@@ -304,6 +305,7 @@ func (c *ClientConfig) CreateOrUpdateVhd(ctx context.Context, path string, sourc
 		SourceDisk: sourceDisk,
 		VhdJson:    string(vhdJson),
 	})
+	time.Sleep(130 * time.Second)
 
 	return err
 }
@@ -338,7 +340,6 @@ var getVhdTemplate = template.Must(template.New("GetVhd").Parse(`
 $ErrorActionPreference = 'Stop'
 $path='{{.Path}}'
 
-Start-Sleep -Seconds 20
 $vhdObject = $null
 if (Test-Path $path) {
 	$vhdObject = Get-VHD -path $path | %{ @{
@@ -370,6 +371,7 @@ if ($vhdObject){
 `))
 
 func (c *ClientConfig) GetVhd(ctx context.Context, path string) (result api.Vhd, err error) {
+	//time.Sleep(20 * time.Second)
 	err = c.WinRmClient.RunScriptWithResult(ctx, getVhdTemplate, getVhdArgs{
 		Path: path,
 	}, &result)
