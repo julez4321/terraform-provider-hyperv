@@ -305,7 +305,8 @@ func (c *ClientConfig) CreateOrUpdateVhd(ctx context.Context, path string, sourc
 		SourceDisk: sourceDisk,
 		VhdJson:    string(vhdJson),
 	})
-	time.Sleep(130 * time.Second)
+	//time.Sleep(210 * time.Second)
+	time.Sleep(240 * time.Second)
 
 	return err
 }
