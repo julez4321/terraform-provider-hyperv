@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"text/template"
-	"time"
 
 	"github.com/taliesins/terraform-provider-hyperv/api"
 )
@@ -178,7 +177,6 @@ function Get-FileFromUri {
         if ($newExt -ne $origExt) {
             $filename += $origExt
         }
-
         $destination = (Get-Item -Path ".\" -Verbose).FullName
         if ($FolderPath) { $destination = $FolderPath }
         if ($destination.EndsWith('\')) {
@@ -187,8 +185,9 @@ function Get-FileFromUri {
         else {
             $destination += '\' + $filename
         }
-        $webclient = New-Object System.Net.WebClient
-        $webclient.DownloadFile($fUri.AbsoluteUri, $destination)
+		$ProgressPreference = 'SilentlyContinue'
+        Invoke-WebRequest $fUri.AbsoluteUri -outfile $destination | Out-Null
+		#Start-Sleep -Duration (New-TimeSpan -Seconds 100000)
     }
 }
 
@@ -305,8 +304,6 @@ func (c *ClientConfig) CreateOrUpdateVhd(ctx context.Context, path string, sourc
 		SourceDisk: sourceDisk,
 		VhdJson:    string(vhdJson),
 	})
-	//time.Sleep(210 * time.Second)
-	time.Sleep(240 * time.Second)
 
 	return err
 }
